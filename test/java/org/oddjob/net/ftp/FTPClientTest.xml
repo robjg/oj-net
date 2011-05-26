@@ -1,0 +1,39 @@
+<oddjob xmlns:net='http://rgordon.co.uk/oddjob/net' 
+        id="this">
+    <job>
+        <net:ftp host='localhost' 
+                 port='${ftp.port}'
+                 username='admin' 
+                 password='admin'>
+            <commands>
+                <list>
+                    <values>
+                        <net:ftp-pwd id='pwd'/>
+                        <net:ftp-mk-dir path='stuff'/>
+                        <net:ftp-cd path='stuff'/>
+                        <net:ftp-list id='list1'/>
+                        <net:ftp-ascii/>
+                        <net:ftp-put remote='stuff.txt'>
+                            <file>
+                                <file file='${this.args[0]}'/>
+                            </file>
+                        </net:ftp-put>
+                        <net:ftp-list id='list2'/>
+                        <net:ftp-rename from='stuff.txt'
+                                        to='things.txt'/>
+                        <net:ftp-get remote='things.txt'>
+                            <file>
+                                <file file='${this.args[1]}'/>
+                            </file>
+                        </net:ftp-get>
+                        <net:ftp-delete path='things.txt'/>
+                        <net:ftp-bin/>
+                        <net:ftp-cd/>
+                        <net:ftp-rm-dir path='stuff'/>
+                    </values>
+                </list>
+            </commands>
+        </net:ftp>
+    </job>
+</oddjob>
+        
