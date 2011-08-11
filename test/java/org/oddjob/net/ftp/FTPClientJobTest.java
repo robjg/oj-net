@@ -21,7 +21,7 @@ import org.oddjob.OurDirs;
 import org.oddjob.arooa.reflect.ArooaPropertyException;
 import org.oddjob.arooa.xml.XMLConfiguration;
 import org.oddjob.io.DeleteJob;
-import org.oddjob.state.JobState;
+import org.oddjob.state.ParentState;
 
 public class FTPClientJobTest extends TestCase {
 
@@ -183,7 +183,7 @@ public class FTPClientJobTest extends TestCase {
 				getClass().getClassLoader()));
 		oddjob.run();
 	
-		assertEquals(JobState.COMPLETE, oddjob.lastJobStateEvent().getJobState());
+		assertEquals(ParentState.COMPLETE, oddjob.lastStateEvent().getState());
 		
 		OddjobLookup lookup = new OddjobLookup(oddjob);
 		
