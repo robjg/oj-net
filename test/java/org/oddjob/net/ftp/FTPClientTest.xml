@@ -8,17 +8,29 @@
             <commands>
                 <list>
                     <values>
-                        <net:ftp-pwd id='pwd'/>
+                        <identify id='pwd'>
+                            <value>
+                                <net:ftp-pwd/>
+                            </value>
+                        </identify>
                         <net:ftp-mk-dir path='stuff'/>
                         <net:ftp-cd path='stuff'/>
-                        <net:ftp-list id='list1'/>
+                        <identify id='list1'>
+                            <value>
+                                <net:ftp-list/>
+                            </value>
+                        </identify>
                         <net:ftp-ascii/>
                         <net:ftp-put remote='stuff.txt'>
                             <file>
                                 <file file='${this.args[0]}'/>
                             </file>
                         </net:ftp-put>
-                        <net:ftp-list id='list2'/>
+                        <identify id='list2'>
+                            <value>
+                                <net:ftp-list/>
+                            </value>
+                        </identify>
                         <net:ftp-rename from='stuff.txt'
                                         to='things.txt'/>
                         <net:ftp-get remote='things.txt'>
