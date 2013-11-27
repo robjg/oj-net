@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.log4j.Logger;
-import org.oddjob.Helper;
+import org.oddjob.OddjobTestHelper;
 
 public class VerySlowInputStream extends InputStream {
 	private static final Logger logger = Logger.getLogger(VerySlowInputStream.class);
@@ -18,7 +18,7 @@ public class VerySlowInputStream extends InputStream {
 	
 	public void start() throws InterruptedException, TimeoutException {
 		logger.info("Waiting for input stream to start reading.");
-		exchange.exchange(null, Helper.TEST_TIMEOUT, TimeUnit.MILLISECONDS);
+		exchange.exchange(null, OddjobTestHelper.TEST_TIMEOUT, TimeUnit.MILLISECONDS);
 		logger.info("Read started.");
 	}
 	
@@ -27,7 +27,7 @@ public class VerySlowInputStream extends InputStream {
 		logger.info("InputStream read starting.");
 		try {
 			try {
-				exchange.exchange(null, Helper.TEST_TIMEOUT, TimeUnit.MILLISECONDS);
+				exchange.exchange(null, OddjobTestHelper.TEST_TIMEOUT, TimeUnit.MILLISECONDS);
 			} catch (TimeoutException e) {
 				throw new RuntimeException(e);
 			}

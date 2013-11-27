@@ -14,7 +14,7 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.log4j.Logger;
 import org.oddjob.FailedToStopException;
-import org.oddjob.Helper;
+import org.oddjob.OddjobTestHelper;
 import org.oddjob.Oddjob;
 import org.oddjob.OddjobLookup;
 import org.oddjob.OurDirs;
@@ -309,7 +309,7 @@ public class FTPClientJobTest extends TestCase {
 		test.stop();
 		
 		logger.info("Stop the FTP put job.");		
-		t.join(Helper.TEST_TIMEOUT);
+		t.join(OddjobTestHelper.TEST_TIMEOUT);
 		if (t.getState() != State.TERMINATED) {
 			throw new RuntimeException("FTP Thread didn't finish.");
 		}
