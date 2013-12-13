@@ -85,7 +85,7 @@
 			<fileset dir="${ftpsrv.dir}/common/lib">
 				<include name="*.jar"/>
 			</fileset>
-			<pathelement location="${oddjob.src}/build/test"/>
+			<pathelement location="${oddjob.src}/build/tools/classes"/>
 			<fileset dir="${oddjob.src}/opt/lib">
 				<include name="*.jar"/>
 			</fileset>

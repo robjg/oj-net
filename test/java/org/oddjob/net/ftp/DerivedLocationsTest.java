@@ -2,7 +2,7 @@ package org.oddjob.net.ftp;
 
 import java.io.File;
 
-import org.oddjob.OurDirs;
+import org.oddjob.tools.OurDirs;
 
 import junit.framework.TestCase;
 

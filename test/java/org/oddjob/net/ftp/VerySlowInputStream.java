@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.log4j.Logger;
-import org.oddjob.OddjobTestHelper;
+import org.oddjob.tools.OddjobTestHelper;
 
 public class VerySlowInputStream extends InputStream {
 	private static final Logger logger = Logger.getLogger(VerySlowInputStream.class);
