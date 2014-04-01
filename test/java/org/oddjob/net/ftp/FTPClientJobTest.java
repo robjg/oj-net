@@ -51,7 +51,7 @@ public class FTPClientJobTest extends TestCase {
 			DeleteJob delete = new DeleteJob();
 			delete.setFiles(new File[] { home });
 			delete.setForce(true);
-			delete.run();
+			delete.call();
 		}
 		home.mkdirs();
 		
@@ -65,7 +65,7 @@ public class FTPClientJobTest extends TestCase {
 			DeleteJob delete = new DeleteJob();
 			delete.setFiles(new File[] { gottenFile });
 			delete.setForce(true);
-			delete.run();
+			delete.call();
 		}
 				
 		server.setUsersFile(
