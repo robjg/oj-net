@@ -308,7 +308,7 @@ public class FTPClientJobTest extends TestCase {
 		logger.info("Stop the FTP put job.");
 		test.stop();
 		
-		logger.info("Stop the FTP put job.");		
+		logger.info("Wait for FTP thread.");		
 		t.join(OddjobTestHelper.TEST_TIMEOUT);
 		if (t.getState() != State.TERMINATED) {
 			throw new RuntimeException("FTP Thread didn't finish.");
