@@ -50,11 +50,12 @@
 		<property name="ftpsrv.dir"      value="${test.dir}/tools/apache-ftpserver-1.0.2"/>
 
 
-		<property name="build.dir"       value="./build"/>
-		<property name="build.src"       value="${build.dir}/src"/>
-		<property name="build.test"      value="${build.dir}/test"/>
-		<property name="build.classes"   value="${build.dir}/classes"/>
-		<property name="build.lib"       value="${build.dir}/lib"/>
+		<property name="build.dir"       	value="./build"/>
+		<property name="build.src"       	value="${build.dir}/src"/>
+		<property name="build.classes"   	value="${build.dir}/classes"/>
+		<property name="build.test"      	value="${build.dir}/test"/>
+		<property name="build.test.classes" value="${build.test}/classes"/>
+		<property name="build.lib"       	value="${build.dir}/lib"/>
 
 		<property name="test.reports" value="${build.test}/reports"/>
 		
@@ -78,6 +79,8 @@
 	<!-- =================================================================== -->
 	<target name="prepare" depends="init">
 
+		<ivy:retrieve conf="default"/>
+		
 		<ivy:resolve conf="provided" refresh="true" />
 		
 		<ivy:resolve conf="test" refresh="true" />
@@ -95,12 +98,8 @@
 		</path>
 
 		<path id="test-classpath">
-			<path refid="classpath"/>
 			<pathelement path="${build.classes}" />
 			<path refid="test-cachepath"/>
-			<fileset dir="${ftpsrv.dir}/common/lib">
-				<include name="*.jar"/>
-			</fileset>
 		</path>
 		
 		<mkdir dir="${build.dir}"/>
@@ -202,7 +201,7 @@
 		<mkdir dir="${test.reports}"/>
 		
 		<junit printsummary="yes" haltonfailure="no" 
-				failureproperty="junit.failure" fork="yes">
+				failureproperty="junit.failure" fork="yes" forkMode="once">
 			<classpath>
 				<pathelement location="${build.test}" />
 			</classpath>
