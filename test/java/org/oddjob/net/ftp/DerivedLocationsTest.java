@@ -1,16 +1,19 @@
 package org.oddjob.net.ftp;
 
+import org.junit.Test;
+
 import java.io.File;
 
 import org.oddjob.tools.OurDirs;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
 
-public class DerivedLocationsTest extends TestCase {
+public class DerivedLocationsTest extends Assert {
 
 	OurDirs dirs = new OurDirs();
 
 	
+    @Test
 	public void testAllCombinations()  {
 		
 		DerivedLocations test1 = new DerivedLocations(null, null);
@@ -38,6 +41,7 @@ public class DerivedLocationsTest extends TestCase {
 		assertEquals(new File("elsewhere/another-file.txt"), test4.getFile());
 	}
 	
+    @Test
 	public void testLocalIsDirectory()  {
 		
 		File aDir = dirs.relative("work/");

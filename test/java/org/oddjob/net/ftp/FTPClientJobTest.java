@@ -1,4 +1,10 @@
 package org.oddjob.net.ftp;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.After;
+
+import org.junit.Test;
+import org.junit.rules.TestName;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +14,7 @@ import java.util.Properties;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -23,10 +29,12 @@ import org.oddjob.state.ParentState;
 import org.oddjob.tools.OddjobTestHelper;
 import org.oddjob.tools.OurDirs;
 
-public class FTPClientJobTest extends TestCase {
+public class FTPClientJobTest extends Assert {
 
 	private static final Logger logger = Logger.getLogger(FTPClientJobTest.class);
 	
+	@Rule public TestName name = new TestName();
+
 	private final FTPServerService server = 
 		new FTPServerService();
 	
@@ -38,11 +46,11 @@ public class FTPClientJobTest extends TestCase {
 	
 	int port;
 	
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+    @Before
+    public void setUp() throws Exception {
+
 		
-		logger.info("-----------------  " + getName() + "  ------------------");
+		logger.info("-----------------  " + name.getMethodName() + "  ------------------");
 		
 		// Note this isn't relative because ftp server can't be
 		// given a base dir.
@@ -91,13 +99,14 @@ public class FTPClientJobTest extends TestCase {
 		server.start();
 	}
 	
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
+    @After
+    public void tearDown() throws Exception {
+
 		
 		server.stop();
 	}
 	
+    @Test
 	public void testLotsOfCommands() {
 
 		
@@ -170,6 +179,7 @@ public class FTPClientJobTest extends TestCase {
 		assertEquals(toSend.length(), gottenFile.length());
 	}
 	
+    @Test
 	public void testInOddjob() throws ArooaPropertyException, Exception {
 
 		Properties properties = new Properties();
@@ -199,6 +209,7 @@ public class FTPClientJobTest extends TestCase {
 		assertEquals(toSend.length(), gottenFile.length());
 	}
 	
+    @Test
 	public void testGettingAFileThatDoesntExist() {
 
 		
@@ -226,6 +237,7 @@ public class FTPClientJobTest extends TestCase {
 		assertEquals(0, gottenFile.length());
 	}
 	
+    @Test
 	public void testStop() {
 		
 		final FTPClientJob test = new FTPClientJob();
@@ -269,6 +281,7 @@ public class FTPClientJobTest extends TestCase {
 		}
 	}
 	
+    @Test
 	public void testStopLongRunningTransfer() throws FailedToStopException, InterruptedException, TimeoutException {
 		
 		final FTPClientJob test = new FTPClientJob();
