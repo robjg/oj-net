@@ -5,7 +5,8 @@ import java.io.Serializable;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.oddjob.FailedToStopException;
 import org.oddjob.Stoppable;
 
@@ -24,7 +25,7 @@ import org.oddjob.Stoppable;
 public class FTPClientJob implements Runnable, Stoppable, Serializable {
 	private static final long serialVersionUID = 2009102100L;
 	
-	private static final Logger logger = Logger.getLogger(FTPClientJob.class);
+	private static final Logger logger = LoggerFactory.getLogger(FTPClientJob.class);
 
 	/**
 	 * @oddjob.property 
