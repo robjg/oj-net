@@ -1,0 +1,31 @@
+<arooa:descriptor  xmlns:arooa="http://rgordon.co.uk/oddjob/arooa"
+    prefix="net" namespace="http://rgordon.co.uk/oddjob/net">
+	<values>
+		<arooa:bean-def element='ftp-ascii' 
+		    className='org.oddjob.net.ftp.FTPAscii'/>
+		<arooa:bean-def element='ftp-bin' 
+		    className='org.oddjob.net.ftp.FTPBinary'/>
+		<arooa:bean-def element='ftp-cd' 
+		    className='org.oddjob.net.ftp.FTPCd'/>
+		<arooa:bean-def element='ftp-delete' 
+		    className='org.oddjob.net.ftp.FTPDelete'/>
+		<arooa:bean-def element='ftp-get' 
+		    className='org.oddjob.net.ftp.FTPGet'/>
+		<arooa:bean-def element='ftp-list' 
+		    className='org.oddjob.net.ftp.FTPList'/>
+		<arooa:bean-def element='ftp-mk-dir' 
+		    className='org.oddjob.net.ftp.FTPMkDir'/>
+		<arooa:bean-def element='ftp-put' 
+		    className='org.oddjob.net.ftp.FTPPut'/>
+		<arooa:bean-def element='ftp-pwd' 
+		    className='org.oddjob.net.ftp.FTPPwd'/>
+		<arooa:bean-def element='ftp-rename' 
+		    className='org.oddjob.net.ftp.FTPRename'/>
+		<arooa:bean-def element='ftp-rm-dir' 
+		    className='org.oddjob.net.ftp.FTPRmDir'/>
+	</values>
+	<components>
+		<arooa:bean-def element='ftp'
+		    className='org.oddjob.net.ftp.FTPClientJob'/>
+	</components>
+</arooa:descriptor>

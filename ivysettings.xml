@@ -1,5 +1,7 @@
 <ivysettings>
-  <properties file="${ivy.default.ivy.user.dir}/ivy.properties"/>
-  <property name="ivy.global.settings.dir" value="${ivy.default.settings.dir}" override="false"/>
-  <include url="${ivy.global.settings.dir}/ivysettings.xml"/>
+  <include file="../oj-assembly/ivysettings.xml"/>
+
+  <property name="commons-net.version" value="3.4"/>
+  <property name="ftpserver.version" value="1.0.6"/>
+
 </ivysettings>

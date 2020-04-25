@@ -9,19 +9,19 @@
         
 	<dependencies>
 	
-		<dependency org="commons-net" name="commons-net" rev="3.4"
+		<dependency org="commons-net" name="commons-net" rev="${commons-net.version}"
 			conf="default->default"/>
 		
-	    <dependency org="uk.co.rgordon" name="oddjob" rev="latest.integration"
+	    <dependency org="uk.co.rgordon" name="oddjob" rev="${project.version}"
 	    	conf="provided->default" />
 	    	
-		<dependency org="org.apache.ftpserver" name="ftpserver-core" rev="1.0.6"
+		<dependency org="org.apache.ftpserver" name="ftpserver-core" rev="${ftpserver.version}"
 			conf="test->default"/>
 
-		<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.7.13"
+		<dependency org="org.slf4j" name="slf4j-log4j12" rev="${slf4j.version}"
 			conf="test->default"/>
 
-	    <dependency org="uk.co.rgordon" name="arooa" rev="latest.integration"
+	    <dependency org="uk.co.rgordon" name="arooa" rev="${project.version}"
 	    	conf="test->test" />
 	    	
 	</dependencies>
