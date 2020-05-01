@@ -23,7 +23,13 @@
 
 	    <dependency org="uk.co.rgordon" name="arooa" rev="${project.version}"
 	    	conf="test->test" />
-	    	
+
+		<dependency org="org.junit.jupiter" name="junit-jupiter" rev="${junit5.version}"
+					conf="test->default"/>
+
+		<dependency org="org.junit.vintage" name="junit-vintage-engine" rev="${junit5.version}"
+					conf="test->default"/>
+
 	</dependencies>
   
 </ivy-module>

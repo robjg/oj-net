@@ -42,14 +42,10 @@
 		<!-- <property name="build.compiler" value="classic"/> -->
 
 		<property name="src.dir"      		value="./src"/>
-		<property name="test.dir"     		value="./test"/>
 		<property name="main.java"        	value="${src.dir}/main/java"/>
 		<property name="main.resources"   	value="${src.dir}/main/resources"/>
 		<property name="test.java"        	value="${src.dir}/test/java"/>
 		<property name="test.resources"   	value="${src.dir}/test/resources"/>
-		<property name="work.dir"     		value="./work"/>
-		<property name="ftpsrv.dir"      	value="${test.dir}/tools/apache-ftpserver-1.0.2"/>
-
 
 		<property name="build.dir"       	value="./build"/>
 		<property name="build.src"       	value="${build.dir}/src"/>
@@ -83,17 +79,14 @@
 
 		<mkdir dir="${build.dir}"/>
 
-		<ivy:retrieve pattern="${oddball.lib}/[artifact]-[revision].[ext]" conf="default" />
-		
+		<ivy:cachepath pathid="default-cachepath" conf="default" />
+
 		<ivy:cachepath pathid="provided-cachepath" conf="provided" />
 				
 		<ivy:cachepath pathid="test-cachepath" conf="test" />
 			
 		<path id="classpath">
-			<fileset dir="${oddball.lib}">
-				<include name="*.jar"/>
-				<exclude name="${name}*.jar"/>
-			</fileset>
+			<path refid="default-cachepath"/>
 			<path refid="provided-cachepath"/>
 		</path>
 
@@ -147,7 +140,9 @@
 	<!-- Creates the jar file                                                -->
 	<!-- =================================================================== -->
 	<target name="jar" depends="compile-tests" description="Generates the jar packages">
-		
+
+		<mkdir dir="${oddball.dir}"/>
+
 	    <jar destfile="${oddball.lib}/${jar.name}"
 	         basedir="${build.classes}">
 			<metainf dir=".">
@@ -155,7 +150,9 @@
 				<include name="NOTICE.txt"/>
 			</metainf>
 		</jar>
-		
+
+		<ivy:retrieve pattern="${oddball.lib}/[artifact]-[revision].[ext]" conf="default" />
+
 	</target>
 
 	<!-- =================================================================== -->
@@ -182,30 +179,30 @@
 	</target>
 
 	<target name="all-tests" depends="jar" description="Perform jUnit tests">
-		<mkdir dir="${work.dir}"/>
 		<mkdir dir="${test.reports}"/>
-		
-		<junit printsummary="yes" haltonfailure="no" 
-				failureproperty="junit.failure" fork="yes" forkMode="once">
+
+		<junitlauncher printsummary="yes" haltonfailure="no"
+					   failureproperty="junit.failure">
 			<classpath>
 				<pathelement location="${build.tests}" />
 			</classpath>
 			<classpath refid="test-classpath"/>
-			<batchtest todir="${test.reports}">
+			<testclasses outputdir="${basedir}/${test.reports}">
+				<fork>
+					<sysproperty key="basedir" value="${basedir}"/>
+					<sysproperty key="ant.file" value="${ant.file}"/>
+					<sysproperty key="oddjob.net.test.ftp.port" value="${oddjob.net.test.ftp.port}"/>
+				</fork>
 				<fileset dir="${build.tests}">
-					<include name="**/test/*TestCase.class"/>
 					<include name="**/*Test.class" />
 					<exclude name="**/AllTest.class" />
 					<exclude name="**/*$$*Test.class" />
 				</fileset>
-			</batchtest>
-			<formatter type="xml"/>
-			<sysproperty key="basedir" value="${basedir}"/>
-			<sysproperty key="oddjob.home" value="${oddjob.home}"/>
-			<sysproperty key="ant.file" value="${ant.file}"/>
-			<sysproperty key="oddjob.net.test.ftp.port" value="${oddjob.net.test.ftp.port}"/>
-		</junit>
-		
+				<listener type="legacy-brief" sendSysOut="true"/>
+				<listener type="legacy-xml" sendSysErr="true" sendSysOut="true"/>
+			</testclasses>
+		</junitlauncher>
+
 		<junitreport todir="${test.reports}">
 			<fileset dir="${test.reports}">
 		    	<include name="TEST-*.xml"/>
@@ -217,11 +214,10 @@
 	</target>
 
 	<target name="single-test" depends="jar" description="Single JUnit test">
-		<mkdir dir="${work.dir}"/>
-			
+
 		<junit printsummary="yes" haltonfailure="yes" fork="yes">
 			<classpath>
-				<pathelement location="${build.test}" />
+				<pathelement location="${build.tests}" />
 			</classpath>
 			<classpath refid="test-classpath"/>
 			<formatter type="plain" usefile="no" />

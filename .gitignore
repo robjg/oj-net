@@ -1,6 +1,8 @@
 /build
 /work
 /classes
+.classpath
+.project
 *.iml
 /.idea
 /target/

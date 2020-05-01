@@ -1,11 +1,12 @@
 package org.oddjob.net.ftp;
-import java.io.File;
 
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
+
+import java.io.File;
 
 
 public class FTPServerService {
