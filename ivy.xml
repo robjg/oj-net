@@ -13,7 +13,7 @@
 			conf="default->default"/>
 		
 	    <dependency org="uk.co.rgordon" name="oddjob" rev="${project.version}"
-	    	conf="provided->default" />
+	    	conf="provided->default" changing="true"/>
 	    	
 		<dependency org="org.apache.ftpserver" name="ftpserver-core" rev="${ftpserver.version}"
 			conf="test->default"/>
@@ -22,7 +22,7 @@
 			conf="test->default"/>
 
 	    <dependency org="uk.co.rgordon" name="arooa" rev="${project.version}"
-	    	conf="test->test" />
+	    	conf="test->test" changing="true"/>
 
 		<dependency org="org.junit.jupiter" name="junit-jupiter" rev="${junit5.version}"
 					conf="test->default"/>
