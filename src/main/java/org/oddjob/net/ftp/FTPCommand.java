@@ -17,9 +17,9 @@ public interface FTPCommand {
 	 * @param client The client session.
 	 * @return true if OK, false otherwise.
 	 * 
-	 * @throws IOException
+	 * @throws IOException If something goes wrong.
 	 */
-	public boolean executeWith(FTPClient client)
+	boolean executeWith(FTPClient client)
 	throws IOException ;
 	
 }

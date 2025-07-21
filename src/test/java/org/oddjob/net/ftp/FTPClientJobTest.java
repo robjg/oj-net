@@ -1,7 +1,7 @@
 package org.oddjob.net.ftp;
 
-import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
+import org.hamcrest.MatcherAssert;
 import org.junit.*;
 import org.junit.rules.TestName;
 import org.oddjob.FailedToStopException;
@@ -18,10 +18,12 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.lang.Thread.State;
-import java.lang.Thread.UncaughtExceptionHandler;
+import java.net.ServerSocket;
 import java.util.Properties;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
+
+import static org.hamcrest.Matchers.is;
 
 public class FTPClientJobTest extends Assert {
 
@@ -43,7 +45,7 @@ public class FTPClientJobTest extends Assert {
     public void setUp() throws Exception {
 
 
-        logger.info("-----------------  " + name.getMethodName() + "  ------------------");
+        logger.info("-----------------  {}  ------------------", name.getMethodName());
 
         // Note this isn't relative because ftp server can't be
         // given a base dir.
@@ -54,7 +56,8 @@ public class FTPClientJobTest extends Assert {
             delete.setForce(true);
             delete.call();
         }
-        home.mkdirs();
+
+        MatcherAssert.assertThat(home.mkdirs(), is(true));
 
         toSend = OurDirs.basePath()
                 .resolve("src/test/files/test.txt")
@@ -64,28 +67,25 @@ public class FTPClientJobTest extends Assert {
                 .resolve("result.txt").toFile();
 
         server.setUsersFile(OurDirs.basePath()
-                .resolve("src/test/tools/apache-ftpserver-1.0.2/res/conf/users.properties")
+                .resolve("src/test/tools/apache-ftpserver-1.2.1/res/conf/users.properties")
                 .toFile());
 
         String portText = System.getProperty("oddjob.net.test.ftp.port");
         if (portText != null) {
-            logger.info("Attempting to set port to " + portText);
-            try {
-                this.port = Integer.parseInt(portText);
-            } catch (NumberFormatException e) {
-                logger.info("Port not a number. Using default port.");
-            }
-            server.setPort(port);
+            logger.info("Attempting to set port to {}", portText);
+            this.port = Integer.parseInt(portText);
         } else {
-            logger.info("Using default port.");
+            try (ServerSocket serverSocket = new ServerSocket(0)) {
+                this.port = serverSocket.getLocalPort();
+            }
         }
 
+        server.setPort(this.port);
         server.start();
     }
 
     @After
     public void tearDown() {
-
 
         server.stop();
     }
@@ -231,37 +231,35 @@ public class FTPClientJobTest extends Assert {
         test.setUsername("admin");
         test.setPassword("admin");
 
-        test.setCommands(new FTPCommand[]{
-                new FTPCommand() {
+        AtomicReference<Boolean> stopped = new AtomicReference<>();
 
-                    @Override
-                    public boolean executeWith(FTPClient client) throws IOException {
+        test.setCommands(new FTPCommand[] {
+                client -> {
 
-                        new Thread(new Runnable() {
+                    new Thread(() -> {
+                        try {
+                            test.stop();
+                        } catch (FailedToStopException e) {
+                            fail("Failed to stop.");
+                        }
+                    }).start();
 
-                            @Override
-                            public void run() {
-                                try {
-                                    test.stop();
-                                } catch (FailedToStopException e) {
-                                    fail("Failed to stop.");
-                                }
-                            }
-                        }).start();
-
-                        while (true) {
+                    while (true) {
+                        try {
                             client.noop();
+                        } catch (IOException e) {
+                            logger.info("Expected exception: {}", e.getMessage());
+                            stopped.set(true);
+                            break;
                         }
                     }
+                    return true;
                 }
         });
 
-        try {
-            test.run();
-            fail("Exception expected.");
-        } catch (Exception e) {
-            // expected
-        }
+        test.run();
+
+        MatcherAssert.assertThat(stopped.get(), is(true));
     }
 
     @Test
@@ -287,16 +285,9 @@ public class FTPClientJobTest extends Assert {
         final AtomicReference<Throwable> exceptionRef = new AtomicReference<>();
 
         Thread t = new Thread(test);
-        t.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-
-            @Override
-            public void uncaughtException(Thread t, Throwable e) {
-                exceptionRef.set(e);
-            }
-        });
+        t.setUncaughtExceptionHandler((t1, e) -> exceptionRef.set(e));
         logger.info("Starting FTPJob thread.");
         t.start();
-
 
         logger.info("Ensure FTP put is reading from out InputStream.");
         input.start();
@@ -312,7 +303,7 @@ public class FTPClientJobTest extends Assert {
 
         assertNotNull(exceptionRef.get());
         Throwable e = exceptionRef.get().getCause();
-        logger.info("FTPException is " + e.toString());
+        logger.info("FTPException is {}", e.toString());
         assertTrue(e instanceof IOException);
     }
 }

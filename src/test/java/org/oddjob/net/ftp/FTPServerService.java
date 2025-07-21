@@ -5,11 +5,16 @@ import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.Objects;
 
 
 public class FTPServerService {
+
+	private static final Logger logger = LoggerFactory.getLogger(FTPServerService.class);
 
 	private FtpServer server;
 
@@ -21,20 +26,26 @@ public class FTPServerService {
 		
 		PropertiesUserManagerFactory umf =
 			new PropertiesUserManagerFactory();
-		umf.setFile(usersFile);
+		umf.setFile(Objects.requireNonNull(usersFile,
+				"No Server Properties File."));
 		
 		FtpServerFactory serverFactory = new FtpServerFactory();
-		serverFactory.setUserManager(
-				umf.createUserManager());
+		serverFactory.setUserManager(umf.createUserManager());
 		
 		if (port > 0) {
 			ListenerFactory factory = new ListenerFactory();
 	        
 			// set the port of the listener
-			factory.setPort(2221);
+			factory.setPort(port);
 
 			// replace the default listener
 			serverFactory.addListener("default", factory.createListener());
+			logger.info("Starting FTP Server on Port {} with properties file {}",
+					port, usersFile);
+		}
+		else {
+			logger.info("Starting FTP Server on Default Port with properties file {}",
+					usersFile);
 		}
 		
 		
@@ -46,7 +57,8 @@ public class FTPServerService {
 	}
 	
 	public void stop() {
-		
+
+		logger.info("Stopping FTP Server.");
 		server.stop();
 		
 	}
