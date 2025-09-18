@@ -50,7 +50,7 @@ public class FTPClientJob implements Runnable, Stoppable, Serializable {
 	
 	/**
 	 * @oddjob.property 
-	 * @oddjob.description The user name to connect to the FTP server with.
+	 * @oddjob.description The username to connect to the FTP server with.
 	 * @oddjob.required Yes.
 	 */
 	private String username;
@@ -96,11 +96,11 @@ public class FTPClientJob implements Runnable, Stoppable, Serializable {
 		
 		try {
 			if (port > 0) {
-				logger.info("Connecting to " + host + ", port " + port + ".");
+                logger.info("Connecting to {}, port {}.", host, port);
 				client.connect(host, port);
 			}
 			else {
-				logger.info("Connecting to " + host + ".");
+                logger.info("Connecting to {}.", host);
 				client.connect(host);
 			}
    			logger.info(client.getReplyString());
@@ -113,8 +113,8 @@ public class FTPClientJob implements Runnable, Stoppable, Serializable {
                          + "mode: " + client.getReplyString());
                 }
             }
-            
-			logger.info("Logging in as " + username + ".");
+
+            logger.info("Logging in as {}.", username);
 			
    			boolean login = client.login(username, password);
    		            
@@ -129,7 +129,13 @@ public class FTPClientJob implements Runnable, Stoppable, Serializable {
 				for(FTPCommand command : commands) {
 					
 					logger.info(command.toString());
-					
+
+                    FTPClient client = this.client;
+                    if (client == null) {
+                        logger.info("Job stopped, not executing any more commands.");
+                        break;
+                    }
+
 					boolean ok = command.executeWith(client);
 					
 					logger.info(client.getReplyString());
@@ -144,11 +150,12 @@ public class FTPClientJob implements Runnable, Stoppable, Serializable {
 			throw new RuntimeException(e);
 		}
 		finally {
-			if (client.isConnected()) {
+            FTPClient client = this.client;
+			if (client != null && client.isConnected()) {
 				try {
 					client.disconnect();
-					logger.info("Disconnected from " + host + ".");
-					client = null;
+                    logger.info("Disconnected from {}.", host);
+					this.client = null;
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}

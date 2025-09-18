@@ -14,7 +14,7 @@ Connect to an FTP server and run a set of FTP commands.
 | [password](#propertypassword) | The password to connect to the FTP server with. | 
 | [port](#propertyport) | The Port. | 
 | [result](#propertyresult) |  | 
-| [username](#propertyusername) | The user name to connect to the FTP server with. | 
+| [username](#propertyusername) | The username to connect to the FTP server with. | 
 
 
 ### Example Summary
@@ -101,7 +101,7 @@ The Port.
       <tr><td><i>Required</i></td><td>Yes.</td></tr>
 </table>
 
-The user name to connect to the FTP server with.
+The username to connect to the FTP server with.
 
 
 ### Examples
