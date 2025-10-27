@@ -56,7 +56,7 @@
     </profiles>
 
     <properties>
-        <commons-net.version>3.11.1</commons-net.version>
+        <commons-net.version>3.12.0</commons-net.version>
         <integration.test.tag>IntegrationTest</integration.test.tag>
     </properties>
 
